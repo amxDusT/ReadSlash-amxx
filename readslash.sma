@@ -14,7 +14,7 @@ new bSlash;
 
 public plugin_init()
 {
-    register_plugin( "Read Slash", "1.6", "DusT" );
+    register_plugin( "Read Slash", "1.7", "DusT" );
 
     register_cvar( "AmX_DusT", "Read_Slash", FCVAR_SPONLY | FCVAR_SERVER );
 
@@ -44,7 +44,7 @@ public CheckSlash( id ) {
 
         get_players( players, iNum, "c" );
         
-        format( szArgv, charsmax( szArgv ), "^x04[ReadSlash] %n ^x03%s ^x01:  %s^n", is_user_alive( id )? "":"^x01*DEAD*", id, szArgv );
+        format( szArgv, charsmax( szArgv ), "^x04[ReadSlash] %s ^x03%n ^x01:  %s^n", is_user_alive( id )? "":"^x01*DEAD*", id, szArgv );
         
         for( new i = 0; i < iNum; i++ )
         {
