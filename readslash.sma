@@ -8,17 +8,18 @@
 set_fail_state( "Plugin needs AMXX 1.8.3 or higher." );
 #endif
 
-new pCvarFlag;
+new const VERSION[] = "1.7.1";
+
 new iPriv;                  // cache priv flags
 new bSlash;
 
 public plugin_init()
 {
-    register_plugin( "Read Slash", "1.7", "DusT" );
+    register_plugin( "Read Slash", VERSION, "DusT" );
 
-    register_cvar( "AmX_DusT", "Read_Slash", FCVAR_SPONLY | FCVAR_SERVER );
+    create_cvar( "Read_Slash", VERSION, FCVAR_SPONLY | FCVAR_SERVER );
 
-    pCvarFlag = register_cvar( "amx_slash_flag", "m" );
+    create_cvar( "amx_slash_flag", "m", .description="who can read slash messages. Change map to take effect." );
 
     register_clcmd( "say"           , "CheckSlash"  );
     register_clcmd( "say_team"      , "CheckSlash"  );
@@ -29,7 +30,7 @@ public plugin_cfg()
 {
     new szFlags[ 5 ];
 
-    get_pcvar_string( pCvarFlag, szFlags, charsmax( szFlags ) );
+    get_cvar_string( "amx_slash_flag", szFlags, charsmax( szFlags ) );
 
     iPriv = read_flags( szFlags );
 }
@@ -42,9 +43,9 @@ public CheckSlash( id ) {
     if( szArgv[0] == '/' ){
         new players[ 32 ], iNum; 
 
-        get_players( players, iNum, "c" );
+        get_players( players, iNum, "ch" );
         
-        format( szArgv, charsmax( szArgv ), "^x04[ReadSlash] %s ^x03%n ^x01:  %s^n", is_user_alive( id )? "":"^x01*DEAD*", id, szArgv );
+        format( szArgv, charsmax( szArgv ), "^4[ReadSlash] %s ^3%n ^1:  %s^n", is_user_alive( id )? "":"^1*DEAD*", id, szArgv );
         
         for( new i = 0; i < iNum; i++ )
         {
@@ -70,12 +71,12 @@ public SlashToggle( id ){
     if( check_bit( bSlash, id ) )
     {
         clear_bit( bSlash, id );
-        client_print( id, print_chat, "[ReadSlash] Slash Messages ON" );
+        client_print_color( id, print_team_red, "^4[ReadSlash]^1 Slash Messages ^4ON" );
     }
     else
     {
         set_bit( bSlash, id );
-        client_print( id, print_chat, "[ReadSlash] Slash Messages OFF" );
+        client_print_color( id, print_team_red, "^4[ReadSlash]^1 Slash Messages ^3OFF" );
     }
     return PLUGIN_HANDLED;
 }
