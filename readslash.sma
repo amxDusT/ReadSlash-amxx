@@ -8,7 +8,7 @@
 set_fail_state( "Plugin needs AMXX 1.8.3 or higher." );
 #endif
 
-new const VERSION[] = "1.7.1";
+new const VERSION[] = "1.7.2";
 
 new iPriv;                  // cache priv flags
 new bSlash;
@@ -46,18 +46,10 @@ public CheckSlash( id ) {
         get_players( players, iNum, "ch" );
         
         format( szArgv, charsmax( szArgv ), "^4[ReadSlash] %s ^3%n ^1:  %s^n", is_user_alive( id )? "":"^1*DEAD*", id, szArgv );
-        
         for( new i = 0; i < iNum; i++ )
         {
-            if( ( get_user_flags( players[ i ] ) & iPriv )  && !check_bit( bSlash, players[ i ] ) )
-            {
-                static msgSayText;
-                ( msgSayText || ( msgSayText = get_user_msgid( "SayText" ) ) );
-                message_begin( MSG_ONE_UNRELIABLE, msgSayText, {0,0,0}, players[ i ] );
-                write_byte( id );
-                write_string( szArgv );
-                message_end();
-            }
+            if( ( get_user_flags( players[ i ] ) & iPriv ) && !check_bit( bSlash, players[ i ] ) )
+                client_print_color( players[ i ], id, szArgv );
         }
         return PLUGIN_HANDLED_MAIN;
     } 
